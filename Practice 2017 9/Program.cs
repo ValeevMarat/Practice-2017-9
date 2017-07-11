@@ -89,35 +89,58 @@ namespace Practice_2017_9
             Console.BackgroundColor = ConsoleColor.Black;
             Console.Clear();
             return currentIndex + 1;
-        } // Позволяет быстро организовать меню, введя его пункты
+        }   // Позволяет быстро организовать меню, введя его пункты
 
-        static int ReadListLength()
+        static CyclicList CreateNewCyclicList()
         {
-            Console.Write("Введите длину циклического списка (>=1): ");
-            return int.Parse(Console.ReadLine());
-        }                   // Считывание длины списка
+            Console.Write("Введите длину циклического списка (>=1 и <=10000): ");
+            return new CyclicList(Read.IntegerWithBounds(1, 10000, "Ошибка, введите значения между 1 и 10000, включая границы!")); // Ограничения из-за StackOverflow
+        }         // Создаёт новый цикл. список
 
+        static void FindElIndexByValue(CyclicList list)
+        {                             // Список, в котором ведётся поиск
+            if (list.Length == 0)                               // Проверка на пусто список
+            {
+                Console.WriteLine("Ошибка, список пуст!");
+                return;
+            }
+            Console.Write("Введите значение искомого элемента (>=1): ");
+            int elIndex = list.FindElIndexByValue(Read.Natural());
+
+            Console.WriteLine("\nЭлемент по заданному значению " + (elIndex == -1
+                ? "не находится в списке"                       // Если вышел код ошибки (-1), то элемента в списке нет
+                : "находится на " + elIndex + "-ой позиции"));  // Иначе выводится его позиция
+        } // Находит индекс элемента в циклическом списке по его значению
+
+        static void DelElByValue(CyclicList list)
+        {                     // Список, в котором происходит удаление
+            if (list.Length == 0)                               // Проверка на пусто список
+            {
+                Console.WriteLine("Ошибка, список пуст!");
+                return;
+            }
+            Console.Write("Введите значение элемента, который требуется удалить (>=1): ");
+            int elIndex = list.RemoveElByValue(Read.Natural());
+
+            Console.WriteLine("\nЭлемент по заданному значению " + (elIndex == -1
+                ? "не находится в списке"                            // Если вышел код ошибки (-1), то элемента в списке нет
+                : "удалён, элемент был на "+elIndex+"-ой позиции")); // Иначе выводится сообщение о его удалении, и позиция на которой он находился
+        }       // Удаляет элемент в циклическом списке по значению
+        
         static void Main(string[] args)
         {
-            CyclicList list = new CyclicList(ReadListLength());
+            CyclicList list = CreateNewCyclicList();
             while (true)
             {
                 switch (Menu("Ввести длину списка заново", "Вывести список", "Найти элемент в списке (положения элементов в списке изменятся, и т.к. у списка нет ни начала ни конца, то индекс может быть больше его длины)", "Удалить элемент из списка", "Выход"))
                 {
-                    case 1: list = new CyclicList(ReadListLength()); break;
-                    case 2: list.Show(); break;
-                    case 3:
-                        Console.Write("Введите индекс искомого элемента: ");
-                        Console.WriteLine("\nЭлемент по заданному индексу был = "+ list.FindElByIndex(int.Parse(Console.ReadLine())-1));
-                        break;
-                    case 4:
-                        Console.Write("Введите индекс элемента, который требуется удалить: ");
-                        list.RemoveElByIndex(int.Parse(Console.ReadLine())-1);
-                        Console.WriteLine("\nЭлемент по заданному индексу удалён");
-                        break;
+                    case 1: list = CreateNewCyclicList(); break; // Создаёт новый цикл. список
+                    case 2: list.Show(); break;                  // Выводит список на экран
+                    case 3: FindElIndexByValue(list); break;     // Находит индекс элемента в циклическом списке по его значению
+                    case 4: DelElByValue(list); break;           // Удаляет элемент в циклическом списке по значению
                     default: return;
                 }
             }
-        }               // Меню с вариантами действий
+        }                 // Меню с вариантами действий
     }
 }

@@ -5,11 +5,11 @@ namespace Practice_2017_9
     class CyclicList
     {
         private static Element _currentEl;                                                   // Текущий элемент
-        private int _length;                                                                 // Длина циклического списка
+        public int Length;                                                                 // Длина циклического списка
 
         public CyclicList(int length)
         {
-            _length = length;
+            Length = length;
             _currentEl = new Element(length);
             _currentEl = CreateList(_currentEl, _currentEl, length-1);
         }
@@ -20,7 +20,7 @@ namespace Practice_2017_9
             if (length==0)
             {
                 current.Next = first; // Соединяем конец с началом
-                return first; // Делаем, так, чтобы 1 была в конце
+                return first;         // Делаем, так, чтобы 1 была в конце
             }
             current.Next = new Element(length);
             return CreateList(first, current.Next, length-1);
@@ -45,21 +45,29 @@ namespace Practice_2017_9
             Console.WriteLine();
         }                                                                // Выводит список на экран
 
-        public int FindElByIndex(int index)
+        public int FindElIndexByValue(int value)
         {
-            index = index%_length; // Убираем лишние прокрутки
-            if (index == 0)
-                return _currentEl.Value;
-
-            _currentEl = _currentEl.Next;
-
-            return FindElByIndex(index - 1);
+            return FindElIndex(_currentEl, 1, value);
         }                                               // Рекурсивный поиск элемента по индексу
 
-        public void RemoveElByIndex(int index)
+        private int FindElIndex(Element el, int index, int value)
         {
-            index = index%_length;                                    // Убираем лишние прокрутки
-            if (index == 0)
+            if (el.Value == value) return index;
+
+            if (index == Length) return -1;
+
+            el = el.Next;
+            return FindElIndex(el, index + 1, value);
+        }
+
+        public int RemoveElByValue(int value)
+        {
+            return RemoveEl(1, value);
+        }                                            // Удаление элемента по индексу
+
+        private int RemoveEl(int index, int value)
+        {
+            if (value == _currentEl.Value)
             {
                 if (_currentEl == _currentEl.Next) _currentEl = null; // Если список длины один, то очищаем его
                 else
@@ -67,12 +75,14 @@ namespace Practice_2017_9
                     _currentEl.Value = _currentEl.Next.Value;
                     _currentEl.Next = _currentEl.Next.Next;
                 }
-                _length--;
-                return;
+                Length--;
+                return index;
             }
+            if (index == Length) return -1;
+            
             _currentEl = _currentEl.Next;
 
-            RemoveElByIndex(index - 1);
-        }                                            // Удаление элемента по индексу
+            return RemoveEl(index+1,value);
+        }
     }
 }
