@@ -114,11 +114,12 @@ namespace Practice_2017_9
 
         static void DelElByValue(CyclicList list)
         {                     // Список, в котором происходит удаление
-            if (list.Length == 0)                               // Проверка на пусто список
+            if (list.Length == 0)                                   // Проверка на пустой список
             {
                 Console.WriteLine("Ошибка, список пуст!");
                 return;
             }
+            
             Console.Write("Введите значение элемента, который требуется удалить (>=1): ");
             int elIndex = list.RemoveElByValue(Read.Natural());
 
@@ -132,7 +133,7 @@ namespace Practice_2017_9
             CyclicList list = CreateNewCyclicList();
             while (true)
             {
-                switch (Menu("Ввести длину списка заново", "Вывести список", "Найти элемент в списке (положения элементов в списке изменятся, и т.к. у списка нет ни начала ни конца, то индекс может быть больше его длины)", "Удалить элемент из списка", "Выход"))
+                switch (Menu("Ввести длину списка заново", "Вывести список", "Найти элемент в списке", "Удалить элемент из списка", "Выход"))
                 {
                     case 1: list = CreateNewCyclicList(); break; // Создаёт новый цикл. список
                     case 2: list.Show(); break;                  // Выводит список на экран

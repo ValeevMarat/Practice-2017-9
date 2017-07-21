@@ -4,8 +4,8 @@ namespace Practice_2017_9
 {
     class CyclicList
     {
-        private static Element _currentEl;                                                   // Текущий элемент
-        public int Length;                                                                 // Длина циклического списка
+        private static Element _currentEl; // Текущий элемент
+        public int Length;                 // Длина циклического списка
 
         public CyclicList(int length)
         {
@@ -43,12 +43,12 @@ namespace Practice_2017_9
                 current = current.Next;
             }
             Console.WriteLine();
-        }                                                                // Выводит список на экран
+        }                                                     // Выводит список на экран
 
         public int FindElIndexByValue(int value)
         {
             return FindElIndex(_currentEl, 1, value);
-        }                                               // Рекурсивный поиск элемента по индексу
+        }                               // Рекурсивный поиск элемента по значению
 
         private int FindElIndex(Element el, int index, int value)
         {
@@ -58,18 +58,18 @@ namespace Practice_2017_9
 
             el = el.Next;
             return FindElIndex(el, index + 1, value);
-        }
+        }              // Вспомогательная рекурсивная функция для поиска элемента по его значению
 
         public int RemoveElByValue(int value)
         {
             return RemoveEl(1, value);
-        }                                            // Удаление элемента по индексу
+        }                                  // Удаление элемента по значению
 
         private int RemoveEl(int index, int value)
         {
             if (value == _currentEl.Value)
             {
-                if (_currentEl == _currentEl.Next) _currentEl = null; // Если список длины один, то очищаем его
+                if (_currentEl == _currentEl.Next) _currentEl = null;   // Если список длины один, то очищаем его
                 else
                 {
                     _currentEl.Value = _currentEl.Next.Value;
@@ -78,11 +78,15 @@ namespace Practice_2017_9
                 Length--;
                 return index;
             }
-            if (index == Length) return -1;
+            if (index + 1 == Length && _currentEl.Next.Value != value)  // Если следующий элемент последний для проверки и его значение не равно искомому, следовательно его там нет
+            {
+                _currentEl = _currentEl.Next.Next;                      // Делаем изначальный порядок списка
+                return -1;
+            }
             
             _currentEl = _currentEl.Next;
 
             return RemoveEl(index+1,value);
-        }
+        }                             // Вспомогательная рекурсивная функция для удаления элемента по его значению
     }
 }
